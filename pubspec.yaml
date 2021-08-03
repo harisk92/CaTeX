@@ -15,10 +15,10 @@ dependencies:
 
   # The direct meta dependency is used only for tooling purposes.
   # Meta is included in the Flutter SDK by default as a transitive dependency anyway.
-  meta: ^1.1.8
+  meta: ^1.3.0
 
 dev_dependencies:
-  lint: ^1.2.0 # https://pub.dev/packages/lint
+  lint: ^1.5.3 # https://pub.dev/packages/lint
 
   flutter_test:
     sdk: flutter
