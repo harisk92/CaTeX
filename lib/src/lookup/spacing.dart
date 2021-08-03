@@ -9,11 +9,11 @@ import 'package:meta/meta.dart';
 /// This function also accepts inputs for [previous] and [current] that are not
 /// single characters. For example, functions are treated as [_Spacing.ord]s.
 double pixelSpacingFromCharacters({
-  @required String previous,
+  required String previous,
   // todo(creativecreatorormaybenot): probably need next in order to
   // todo| allow for signed numbers
-  @required String current,
-  @required double fontSize,
+  required String current,
+  required double fontSize,
 }) {
   assert(previous != null);
   assert(current != null);
@@ -24,13 +24,13 @@ double pixelSpacingFromCharacters({
           // todo(creativecreatorormaybenot): do not look up symbols here
           // todo| use one lookup everywhere, i.e. use the looked up string
           // todo| from the symbol node
-          : symbols[CaTeXMode.math][previous]?.group?.asSpacingType ??
+          : symbols[CaTeXMode.math]![previous]?.group?.asSpacingType ??
               _Spacing.ord,
       currentSpacingType = current.length != 1
           ? _Spacing.ord
-          : symbols[CaTeXMode.math][current]?.group?.asSpacingType ??
+          : symbols[CaTeXMode.math]![current]?.group?.asSpacingType ??
               _Spacing.ord;
-  return _spacings[previousSpacingType][currentSpacingType]
+  return _spacings[previousSpacingType]![currentSpacingType]
           ?.convertToPx(fontSize) ??
       0;
 }
@@ -84,7 +84,7 @@ enum _Spacing {
 }
 
 extension on SymbolGroup {
-  _Spacing get asSpacingType {
+  _Spacing? get asSpacingType {
     switch (this) {
       case SymbolGroup.mathord:
       case SymbolGroup.textord:

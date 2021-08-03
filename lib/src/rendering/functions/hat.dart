@@ -16,29 +16,29 @@ class RenderHat extends RenderNode with SingleChildRenderNodeMixin {
   /// Constructs a [HatNode] given a [context].
   RenderHat(CaTeXContext context) : super(context);
 
-  TextPainter _hatPainter;
+  late TextPainter _hatPainter;
 
   @override
   void configure() {
     _hatPainter = TypesetPainter(context.copyWith(
-      input: symbols[CaTeXMode.math][r'\hat'].unicode,
+      input: symbols[CaTeXMode.math]![r'\hat']!.unicode,
     ));
     // todo: remove this workaround and implement accents properly
     // todo| see above
-    final upperCase = child.context.input.trim().isNotEmpty &&
-        child.context.input.toUpperCase() == child.context.input;
+    final upperCase = child.context.input!.trim().isNotEmpty &&
+        child.context.input!.toUpperCase() == child.context.input;
 
     _hatPainter.layout();
-    final childSize = sizeChildNode(child),
+    final Size? childSize = sizeChildNode(child),
         hatSize = _hatPainter.size,
         // todo: width needs to be only the bounds of the hat
-        width = max(hatSize.width, childSize.width),
+        width = max(hatSize!.width as Never, childSize!.width as Never),
         height = max(hatSize.height, childSize.height) +
-            (upperCase ? hatSize.height / 10 : 0);
+            (upperCase ? hatSize.height / 10 : 0) as Size?;
 
     child.positionNode(Offset(
-        0, height - childSize.height + (upperCase ? hatSize.height / 10 : 0)));
-    renderSize = Size(width, height);
+        0, height! - (childSize.height as OffsetBase) + (upperCase ? hatSize.height / 10 : 0)));
+    renderSize = Size(width as double, height as double);
   }
 
   @override
@@ -48,7 +48,7 @@ class RenderHat extends RenderNode with SingleChildRenderNodeMixin {
     _hatPainter.paint(
       canvas,
       Offset(
-        max(0, child.renderSize.width / 2 - _hatPainter.size.width / 3),
+        max(0, child.renderSize!.width / 2 - _hatPainter.size.width / 3),
         0,
       ),
     );

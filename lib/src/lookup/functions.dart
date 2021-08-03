@@ -227,64 +227,64 @@ const List<CaTeXFunction> supportedTextFunctions = [
 /// [supportedFunctionNames] *and* this function is in [supportedMathFunctions]
 /// in math mode or in [supportedTextFunctions]
 /// in text mode. Otherwise, this function returns `null`.
-FunctionNode lookupFunction(ParsingContext context) {
-  final input = context.input,
-      mode = context.mode,
-      function = supportedFunctionNames[input];
+FunctionNode? lookupFunction(ParsingContext context) {
+  final String? input = context.input,
+      mode = context.mode as String?,
+      function = supportedFunctionNames[input!] as String?;
 
   switch (mode) {
-    case CaTeXMode.math:
+    case CaTeXMode.math as String?:
       if (!supportedMathFunctions.contains(function)) return null;
       break;
-    case CaTeXMode.text:
+    case CaTeXMode.text as String?:
       if (!supportedTextFunctions.contains(function)) return null;
       break;
   }
 
   switch (function) {
-    case CaTeXFunction.hat:
+    case CaTeXFunction.hat as String?:
       return HatNode(context);
-    case CaTeXFunction.frac:
+    case CaTeXFunction.frac as String?:
       return FracNode(context);
-    case CaTeXFunction.tt:
-    case CaTeXFunction.rm:
-    case CaTeXFunction.sf:
-    case CaTeXFunction.bf:
-    case CaTeXFunction.it:
-    case CaTeXFunction.cal:
-    case CaTeXFunction.mathbb:
+    case CaTeXFunction.tt as String?:
+    case CaTeXFunction.rm as String?:
+    case CaTeXFunction.sf as String?:
+    case CaTeXFunction.bf as String?:
+    case CaTeXFunction.it as String?:
+    case CaTeXFunction.cal as String?:
+    case CaTeXFunction.mathbb as String?:
       return FontNode(context);
-    case CaTeXFunction.textColor:
+    case CaTeXFunction.textColor as String?:
       return TextColorNode(context);
-    case CaTeXFunction.sub:
-    case CaTeXFunction.sup:
+    case CaTeXFunction.sub as String?:
+    case CaTeXFunction.sup as String?:
       return SubSupNode(context);
-    case CaTeXFunction.colorBox:
+    case CaTeXFunction.colorBox as String?:
       return ColorBoxNode(context);
-    case CaTeXFunction.boxed:
+    case CaTeXFunction.boxed as String?:
       return BoxedNode(context);
-    case CaTeXFunction.sqrt:
+    case CaTeXFunction.sqrt as String?:
       return SqrtNode(context);
-    case CaTeXFunction.raiseBox:
+    case CaTeXFunction.raiseBox as String?:
       return RaiseBoxNode(context);
-    case CaTeXFunction.kern:
+    case CaTeXFunction.kern as String?:
       return KernNode(context);
-    case CaTeXFunction.cancel:
+    case CaTeXFunction.cancel as String?:
       return CancelNode(context);
-    case CaTeXFunction.displayStyle:
-    case CaTeXFunction.textStyle:
-    case CaTeXFunction.scriptStyle:
-    case CaTeXFunction.scriptScriptStyle:
+    case CaTeXFunction.displayStyle as String?:
+    case CaTeXFunction.textStyle as String?:
+    case CaTeXFunction.scriptStyle as String?:
+    case CaTeXFunction.scriptScriptStyle as String?:
       return StylingNode(context);
-    case CaTeXFunction.text:
-    case CaTeXFunction.textNormal:
-    case CaTeXFunction.textRm:
-    case CaTeXFunction.textSf:
-    case CaTeXFunction.textTt:
-    case CaTeXFunction.textBf:
-    case CaTeXFunction.textMd:
-    case CaTeXFunction.textIt:
-    case CaTeXFunction.textUp:
+    case CaTeXFunction.text as String?:
+    case CaTeXFunction.textNormal as String?:
+    case CaTeXFunction.textRm as String?:
+    case CaTeXFunction.textSf as String?:
+    case CaTeXFunction.textTt as String?:
+    case CaTeXFunction.textBf as String?:
+    case CaTeXFunction.textMd as String?:
+    case CaTeXFunction.textIt as String?:
+    case CaTeXFunction.textUp as String?:
       return TextNode(context);
   }
   // Not adding a default clause will make
@@ -299,8 +299,8 @@ class FunctionProperties {
   /// Constructs [FunctionProperties] from the number of [arguments] and
   /// a [greediness] value.
   const FunctionProperties({
-    @required this.arguments,
-    @required this.greediness,
+    required this.arguments,
+    required this.greediness,
   })  : assert(arguments != null),
         assert(greediness != null),
         assert(arguments > 0),

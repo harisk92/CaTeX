@@ -38,35 +38,35 @@ class RenderGroup extends RenderNode {
     for (final child in children) {
       initialHeight = max(
         initialHeight,
-        sizeChildNode(child).height,
+        sizeChildNode(child)!.height,
       );
     }
 
     // These are used to cover w/e vertical shifts are applied to child nodes.
     var heightTopOverflow = .0, heightBottomOverflow = .0;
 
-    RenderNode previousChild;
+    RenderNode? previousChild;
     // Position all children centered based on
     // the height that was retrieved before.
     // Additionally, accumulate the total width and position
     // the children horizontally based on that width.
     for (final child in children) {
-      final size = child.renderSize,
+      final Size? size = child.renderSize,
           dy =
               // Divide the space that would be missing at the bottom
               // if the child was positioned at y=0 by two and
               // bump the child down by that value. This will center it.
-              (initialHeight - size.height) / 2,
-          dyShifted = dy + _subSupAddend(child) + _raiseBoxAddend(child);
+              (initialHeight - size!.height) / 2 as Size?,
+          dyShifted = dy! + (_subSupAddend(child) as Offset) + (_raiseBoxAddend(child) as Offset);
 
       // Symbols can cause extra spacing and
       // interact with characters in that way.
       var symbolSpacing = .0;
       if (mode == CaTeXMode.math && previousChild != null) {
         symbolSpacing = pixelSpacingFromCharacters(
-          previous: previousChild.context.input,
-          current: child.context.input,
-          fontSize: context.textSize,
+          previous: previousChild.context.input!,
+          current: child.context.input!,
+          fontSize: context.textSize!,
         );
       }
 
@@ -76,30 +76,30 @@ class RenderGroup extends RenderNode {
       // child to left. This way both are horizontally well aligned.
       var dxShift = .0;
       if (previousChild is RenderSubSup && child is RenderSubSup) {
-        dxShift = -previousChild.renderSize.width;
+        dxShift = -previousChild.renderSize!.width;
       }
 
       child.positionNode(Offset(
         width + symbolSpacing + dxShift,
-        dyShifted,
+        dyShifted as double,
       ));
       width += size.width + symbolSpacing + dxShift;
 
       // todo(creativecreatorormaybenot): remove redundancies
       if (child is RenderSubSup) {
-        if (CharacterCategory.superscript.matches(child.context.input)) {
-          heightTopOverflow = max(heightTopOverflow, -dyShifted);
+        if (CharacterCategory.superscript.matches(child.context.input!)) {
+          heightTopOverflow = max(heightTopOverflow, -dyShifted!);
         } else {
           heightBottomOverflow = max(
-              heightBottomOverflow, (dyShifted + size.height) - initialHeight);
+              heightBottomOverflow, (dyShifted! + (size.height as Offset)) - (initialHeight as OffsetBase) as double);
         }
       } else if (child is RenderRaiseBox) {
         final verticalShift = child.shift;
         if (verticalShift < 0) {
-          heightTopOverflow = max(heightTopOverflow, -dyShifted);
+          heightTopOverflow = max(heightTopOverflow, -dyShifted!);
         } else {
           heightBottomOverflow = max(
-              heightBottomOverflow, (dyShifted + size.height) - initialHeight);
+              heightBottomOverflow, (dyShifted! + (size.height as Offset)) - (initialHeight as OffsetBase) as double);
         }
       }
 
@@ -111,7 +111,7 @@ class RenderGroup extends RenderNode {
     if (heightTopOverflow > 0) {
       for (final child in children) {
         child.positionNode(
-            child.parentData.offset + Offset(0, heightTopOverflow));
+            child.parentData!.offset + Offset(0, heightTopOverflow));
       }
     }
 
@@ -132,7 +132,7 @@ class RenderGroup extends RenderNode {
       // and a mock character in order to get a context for the required shift.
       final contextSize = mockCharacterSize(context);
 
-      if (CharacterCategory.superscript.matches(child.context.input)) {
+      if (CharacterCategory.superscript.matches(child.context.input!)) {
         return -contextSize.height * _supFactor;
       } else {
         return contextSize.height * _subFactor;

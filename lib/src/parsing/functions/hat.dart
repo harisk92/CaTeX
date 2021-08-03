@@ -24,7 +24,7 @@ class HatNode extends SingleChildNode with FunctionNode {
       context,
       createRenderNode,
       children: [
-        child.createWidget(context),
+        child!.createWidget(context),
       ],
     );
   }

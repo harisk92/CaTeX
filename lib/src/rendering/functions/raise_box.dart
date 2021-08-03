@@ -8,7 +8,7 @@ class RenderRaiseBox extends RenderNode with SingleChildRenderNodeMixin {
   /// Constructs a [RenderRaiseBox] given a [context].
   RenderRaiseBox(
     CaTeXContext context, {
-    @required this.shift,
+    required this.shift,
   })  : assert(shift != null),
         super(context);
 
